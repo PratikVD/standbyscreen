@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { useState, useEffect } from "react";
 function getMonthDays(year, month) {
   const days = [];
   const firstDay = new Date(year, month, 1).getDay();
@@ -11,7 +10,11 @@ function getMonthDays(year, month) {
 }
 
 export default function Calendar({ lightMode, large, calendarSize = 270 }) {
-  const now = new Date();
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
   const year = now.getFullYear();
   const month = now.getMonth();
   const today = now.getDate();

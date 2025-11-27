@@ -16,33 +16,50 @@ function App() {
 
   return (
     <div className={`standby-screen${lightMode ? '' : ' dark-mode'}`}> 
-      <button
-        className="mode-toggle"
-        onClick={() => setLightMode((m) => !m)}
+      <div
         style={{
           position: 'absolute',
           top: 32,
           right: 40,
           zIndex: 10,
-          background: 'transparent',
-          border: 'none',
-          padding: 0,
-          cursor: 'pointer',
         }}
-        aria-label="Toggle dark/light mode"
       >
-        {lightMode ? (
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="10" stroke="#222" strokeWidth="3" fill="#f5f5f5" />
-            <path d="M16 6v-3M16 29v-3M6 16h-3M29 16h-3M8.22 8.22l-2.12-2.12M25.9 25.9l-2.12-2.12M8.22 23.78l-2.12 2.12M25.9 6.1l-2.12 2.12" stroke="#222" strokeWidth="2" />
-          </svg>
-        ) : (
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="10" stroke="#f5f5f5" strokeWidth="3" fill="#222" />
-            <path d="M22 16a6 6 0 0 1-6 6" stroke="#f5f5f5" strokeWidth="2" />
-          </svg>
-        )}
-      </button>
+        <label style={{ cursor: 'pointer', display: 'inline-block' }}>
+          <input
+            type="checkbox"
+            checked={lightMode}
+            onChange={() => setLightMode((m) => !m)}
+            style={{ display: 'none' }}
+          />
+          <span
+            style={{
+              display: 'inline-block',
+              width: 54,
+              height: 32,
+              borderRadius: 20,
+              background: lightMode ? '#e0e0e0' : '#222',
+              position: 'relative',
+              transition: 'background 0.3s',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            }}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                top: 3,
+                left: lightMode ? 28 : 3,
+                width: 26,
+                height: 26,
+                borderRadius: '50%',
+                background: lightMode ? '#fff' : '#444',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
+                transition: 'left 0.3s, background 0.3s',
+                border: lightMode ? '1px solid #ccc' : '1px solid #333',
+              }}
+            />
+          </span>
+        </label>
+      </div>
       <div className="standby-content" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: contentWidth, height: '100%', margin: '0 auto', gap: isLarge ? '6vw' : '2vw'}}>
         <div className="standby-left" style={{flex: '0 0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%'}}>
           <AnalogueClock lightMode={lightMode} size={clockSize} />
