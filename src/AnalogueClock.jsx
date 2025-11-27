@@ -25,13 +25,84 @@ export default function AnalogueClock({ lightMode, size = 260 }) {
   const C = S / 2;
   return (
     <svg width={S} height={S} viewBox={`0 0 ${S} ${S}`} style={{ background: 'none' }}>
-      <circle cx={C} cy={C} r={C-10} fill="none" stroke={clockColor} strokeWidth={S/55} />
-      {/* Hour hand */}
-      <line x1={C} y1={C} x2={C + (S/4.5) * Math.sin(Math.PI * hour / 180)} y2={C - (S/4.5) * Math.cos(Math.PI * hour / 180)} stroke={clockColor} strokeWidth={S/30} strokeLinecap="round" />
-      {/* Minute hand */}
-      <line x1={C} y1={C} x2={C + (S/3.1) * Math.sin(Math.PI * minute / 180)} y2={C - (S/3.1) * Math.cos(Math.PI * minute / 180)} stroke={clockColor} strokeWidth={S/50} strokeLinecap="round" />
-      {/* Second hand */}
-      <line x1={C} y1={C} x2={C + (S/2.4) * Math.sin(Math.PI * second / 180)} y2={C - (S/2.4) * Math.cos(Math.PI * second / 180)} stroke={accentColor} strokeWidth={S/110} strokeLinecap="round" />
+      <circle cx={C} cy={C} r={C-10} fill="none" stroke={clockColor} strokeWidth={S/32} />
+      {/* Hour hand - polygon for classic shape */}
+      {(() => {
+        const length = S/4.5;
+        const width = S/22;
+        const angle = hour * Math.PI / 180;
+        const tipX = C + length * Math.sin(angle);
+        const tipY = C - length * Math.cos(angle);
+        const baseLeftX = C + (width/2) * Math.cos(angle);
+        const baseLeftY = C + (width/2) * Math.sin(angle);
+        const baseRightX = C - (width/2) * Math.cos(angle);
+        const baseRightY = C - (width/2) * Math.sin(angle);
+        return (
+          <polygon
+            points={`
+              ${baseLeftX},${baseLeftY}
+              ${tipX},${tipY}
+              ${baseRightX},${baseRightY}
+            `}
+            fill={clockColor}
+            stroke={clockColor}
+            strokeWidth={S/120}
+          />
+        );
+      })()}
+      {/* Minute hand - polygon for classic shape */}
+      {(() => {
+        const length = S/2.7;
+        const width = S/32;
+        const angle = minute * Math.PI / 180;
+        const tipX = C + length * Math.sin(angle);
+        const tipY = C - length * Math.cos(angle);
+        const baseLeftX = C + (width/2) * Math.cos(angle);
+        const baseLeftY = C + (width/2) * Math.sin(angle);
+        const baseRightX = C - (width/2) * Math.cos(angle);
+        const baseRightY = C - (width/2) * Math.sin(angle);
+        return (
+          <polygon
+            points={`
+              ${baseLeftX},${baseLeftY}
+              ${tipX},${tipY}
+              ${baseRightX},${baseRightY}
+            `}
+            fill={clockColor}
+            stroke={clockColor}
+            strokeWidth={S/180}
+          />
+        );
+      })()}
+      {/* Second hand - pointy, no circles, shorter */}
+      {(() => {
+        const length = S/2.7;
+        const tailLength = S/10;
+        const width = S/160;
+        const angle = second * Math.PI / 180;
+        // Pointy polygon
+        const tipX = C + length * Math.sin(angle);
+        const tipY = C - length * Math.cos(angle);
+        const baseLeftX = C + (width/2) * Math.cos(angle);
+        const baseLeftY = C + (width/2) * Math.sin(angle);
+        const baseRightX = C - (width/2) * Math.cos(angle);
+        const baseRightY = C - (width/2) * Math.sin(angle);
+        const tailX = C - tailLength * Math.sin(angle);
+        const tailY = C + tailLength * Math.cos(angle);
+        return (
+          <polygon
+            points={`
+              ${baseLeftX},${baseLeftY}
+              ${tipX},${tipY}
+              ${baseRightX},${baseRightY}
+              ${tailX},${tailY}
+            `}
+            fill={accentColor}
+            stroke={accentColor}
+            strokeWidth={S/300}
+          />
+        );
+      })()}
       {/* Center dot */}
       <circle cx={C} cy={C} r={S/32} fill={accentColor} />
       {/* Ticks */}
